@@ -6,50 +6,6 @@ import (
 	"gorm.io/plugin/soft_delete"
 )
 
-/*
-CREATE TABLE person(
-   	id SERIAL primary key,
-	name varchar(100),
-	birth date,
-	nif varchar(9) UNIQUE NOT NULL
-);
-
-CREATE TABLE address(
-    city varchar(225),
-	street varchar(225),
-	FOREIGN KEY(person) REFERENCES person(id)
-);
-
-// novo
-
-CREATE TABLE person(
-   	id SERIAL primary key,
-	name varchar(100),
-	birth date,
-	nif varchar(9) UNIQUE NOT NULL
-);
-
-CREATE TABLE address(
-	id SERIAL,
-    city varchar(225),
-	street varchar(225),
-	CONSTRAINT fk_person
-		FOREIGN KEY(id)
-			REFERENCES person(id)
-);
-
-insert into person(name,birth,nif)
-values('test1', '10/10/1992', 111111111),
-values('test2', '01/01/1991', 222222222);
-
-
-insert into address(city,street)
-values ('linha1', 'linha1'),
-values ('linha2', 'linha2');
-
-
-*/
-
 // gorm.Model faz um soft delete, e etc
 type Person struct {
 	ID      uint    `json:"id" gorm:"primaryKey"`
@@ -75,6 +31,7 @@ func (Address) TableName() string {
 	return "address"
 }
 
+// i will implement
 // func ListDeleted() (person []Person, err error) {
 // 	db := db.ConnectDb()
 // 	var address []Address
@@ -84,15 +41,6 @@ func (Address) TableName() string {
 func LoadPeople() (person []Person, err error) {
 	var address []Address
 	db := db.ConnectDb()
-
-	/*
-		não precisa de nada disso..
-		inner join address on (person.id = address.id)
-		inner join person on (person.id = address.id)
-	*/
-
-	// db.Raw(`select * from person`).Scan(&person)
-	// db.Raw(`select * from address`).Scan(&address)
 
 	err = db.Find(&person).Error
 	if err == nil {
@@ -105,7 +53,7 @@ func LoadPeople() (person []Person, err error) {
 	return
 }
 
-// Só dar um select pelo id e dar append em person
+// find and show person by id
 func LoadPersonByID(search string) (person Person, err error) {
 	db := db.ConnectDb()
 	var address Address
@@ -114,39 +62,12 @@ func LoadPersonByID(search string) (person Person, err error) {
 	if err == nil {
 		err = db.Find(&address, search).Error
 	}
-	// err = db.Raw(`select * from person where person.id = ?`, search).Scan(&person).Error
-	// if err == nil {
-	// 	err = db.Raw(`select * from address where address.id = ?`, search).Scan(&address).Error
-	// }
 
 	person.Address = address
 	return
 }
 
-func LoadPersonByString(search string) (person []Person, err error) {
-	db := db.ConnectDb()
-	var address []Address
-
-	// err = db.Find(&person, search).Error
-	// if err == nil {
-	// 	err = db.Find(&address, search).Error
-	// }
-
-	db.Raw(`select * from person join address on (person.id = address.id) where (address.street like ? or address.city like ?)`, search, search).Scan(&person)
-
-	db.Raw(`select * from address where (address.street like ? or address.city like ?)`, search, search).Scan(&address)
-
-	// err = db.Raw(`select * from person where person.id = ?`, search).Scan(&person).Error
-	// if err == nil {
-	// 	err = db.Raw(`select * from address where address.id = ?`, search).Scan(&address).Error
-	// }
-
-	for i := 0; i < len(person); i++ {
-		person[i].Address = address[i]
-	}
-	return
-}
-
+// search a person by name or part of name
 func LoadPersonByName(search string) (person []Person, err error) {
 	db := db.ConnectDb()
 	var address []Address
@@ -165,6 +86,7 @@ func LoadPersonByName(search string) (person []Person, err error) {
 	return
 }
 
+// search a person by your address or part of it address
 func LoadPersonByAddress(search string) (person []Person, err error) {
 	db := db.ConnectDb()
 	var address []Address
@@ -176,18 +98,13 @@ func LoadPersonByAddress(search string) (person []Person, err error) {
 		err = db.Table(`address`).Joins(`join person on (person.id = address.id)`).Where(`lower(address.street) like lower(?) or lower(address.city) like lower(?) and (address.is_del = 0)`, search, search).Scan(&address).Error
 	}
 
-	/*
-		err = db.Raw(`select * from person join address on (person.id = address.id) where (lower(address.street) like lower(?) or lower(address.city) like lower(?))`, search, search).Scan(&person).Error
-		if err == nil {
-			err = db.Raw(`select * from address where (lower(address.street) like lower(?) or lower(address.city) like lower(?))`, search, search).Scan(&address).Error
-		}
-	*/
 	for i := 0; i < len(person); i++ {
 		person[i].Address = address[i]
 	}
 	return
 }
 
+// create a person with address
 func CreatePerson(person Person) (Person, error) {
 	db := db.ConnectDb()
 	err := db.Create(&person).Error
@@ -195,6 +112,7 @@ func CreatePerson(person Person) (Person, error) {
 	return person, err
 }
 
+// update a person
 func UpdatePerson(person Person, address Address) (Person, error) {
 	db := db.ConnectDb()
 	err := db.Save(&person).Error

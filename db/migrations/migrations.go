@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+/* useless function*/
 func RunMigrations(db *gorm.DB) {
 	db.AutoMigrate(models.Person{}, models.Address{})
 }
