@@ -6,6 +6,8 @@ Usage:
 
 - POST
 ```
+http://localhost:3000/api/person/
+
 {
   "name": "name",
   "birth": "01-01-1991",
@@ -18,6 +20,8 @@ Usage:
 ```
 - PUT
 ```
+http://localhost:3000/api/person/
+
 {
   "id"  : 1,
   "name": "nameEdited",
