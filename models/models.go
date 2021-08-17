@@ -6,7 +6,7 @@ import (
 	"gorm.io/plugin/soft_delete"
 )
 
-// gorm.Model faz um soft delete, e etc
+// struct that the table will be created with
 type Person struct {
 	ID      uint    `json:"id" gorm:"primaryKey"`
 	Name    string  `json:"name"`
@@ -17,6 +17,7 @@ type Person struct {
 	IsDel soft_delete.DeletedAt `gorm:"softDelete:flag"`
 }
 
+// Many Has One
 type Address struct {
 	City   string `json:"city"`
 	Street string `json:"street"`
