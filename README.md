@@ -1,5 +1,6 @@
 # API-REST-GO
- A API that you can register people write in golang
+An API that you can register people.
+Code written in golang
 
 Usage: 
 
