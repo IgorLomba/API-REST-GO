@@ -1,5 +1,5 @@
 # API-REST-GO
-An API that you can register people.
+An API you can register, update, list and delete people.
 Code written in golang
 
 Usage: 
