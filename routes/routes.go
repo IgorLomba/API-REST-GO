@@ -6,7 +6,6 @@ import (
 )
 
 func LoadRoutes(router *gin.Engine) *gin.Engine {
-
 	main := router.Group("api")
 	{
 		main.GET("/", controllers.Home)
@@ -23,5 +22,4 @@ func LoadRoutes(router *gin.Engine) *gin.Engine {
 		}
 	}
 	return router
-
 }

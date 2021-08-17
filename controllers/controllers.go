@@ -11,6 +11,7 @@ func Home(c *gin.Context) {
 	c.JSON(http.StatusOK, "API DARTHxIKE")
 }
 
+// list all people and addresses
 func GetAllPerson(c *gin.Context) {
 	person, _ := models.LoadPeople()
 	c.JSON(http.StatusOK, person)
@@ -41,7 +42,7 @@ func GetPersonId(c *gin.Context) {
 
 }
 
-// get person by name (like)
+// get person by name
 func GetPersonName(c *gin.Context) {
 	id := c.Param("id")
 	// log.Println("IDEZERAA", id)
@@ -62,10 +63,9 @@ func GetPersonName(c *gin.Context) {
 	c.JSON(200, person)
 }
 
-// get person by address (like)
+// get person by address
 func GetPersonAddress(c *gin.Context) {
 	id := c.Param("id")
-	// log.Println("IDEZERAA", id)
 	person, err := models.LoadPersonByAddress(id)
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -82,44 +82,6 @@ func GetPersonAddress(c *gin.Context) {
 	}
 	c.JSON(200, person)
 }
-
-/* func getPerson_Old(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	if r.FormValue("id") != "" {
-		id := r.FormValue("id")
-		// log.Println("IDDDDDDDD", id)
-		person, _ := models.LoadPersonByID(id)
-		if person.ID == 0 {
-			json.NewEncoder(w).Encode("ID NOT FOUND")
-		} else {
-			json.NewEncoder(w).Encode(person)
-		}
-	}
-
-	if r.FormValue("name") != "" {
-		name := r.FormValue("name")
-		// log.Println("Name", name)
-		person, _ := models.LoadPersonByName(name)
-		if len(person) == 0 {
-			json.NewEncoder(w).Encode("NAME NOT FOUND")
-		} else {
-			json.NewEncoder(w).Encode(person)
-		}
-	}
-
-	if r.FormValue("address") != "" {
-		address := r.FormValue("address")
-		// log.Println("Address", address)
-		person, _ := models.LoadPersonByAddress(address)
-		if len(person) == 0 {
-			json.NewEncoder(w).Encode("ADDRESS NOT FOUND")
-		} else {
-			json.NewEncoder(w).Encode(person)
-		}
-	}
-
-}
-*/
 
 func CreatePerson(c *gin.Context) {
 	var person models.Person
@@ -142,7 +104,6 @@ func CreatePerson(c *gin.Context) {
 
 // don't forget to pass person id and address id in PUT json request
 func UpdatePerson(c *gin.Context) {
-	// db := db.ConnectDb()
 	var person models.Person
 	var address models.Address
 	err := c.ShouldBindJSON(&person)
@@ -152,7 +113,6 @@ func UpdatePerson(c *gin.Context) {
 		})
 		return
 	}
-
 	person, err = models.UpdatePerson(person, address)
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -163,10 +123,9 @@ func UpdatePerson(c *gin.Context) {
 	c.JSON(200, person)
 }
 
-// get person by a ID
+// delet person by ID
 func DeletePersonID(c *gin.Context) {
 	id := c.Param("id")
-	// log.Println("IDEZERAA", id)
 	err := models.DeletePersonById(id)
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -175,5 +134,4 @@ func DeletePersonID(c *gin.Context) {
 		return
 	}
 	c.Status(204)
-
 }

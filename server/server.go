@@ -19,6 +19,7 @@ func NewServer() Server {
 	}
 }
 
+// run server in 3000
 func (s *Server) Run() {
 	router := routes.LoadRoutes(s.server)
 	log.Println("server is running at port", s.port)
