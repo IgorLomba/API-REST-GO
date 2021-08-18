@@ -1,10 +1,13 @@
 # API-REST-GO
- A API that you can register people write in golang
+An API you can register, update, list and delete people.
+Code written in golang
 
 Usage: 
 
 - POST
 ```
+http://localhost:3000/api/person/
+
 {
   "name": "name",
   "birth": "01-01-1991",
@@ -17,6 +20,8 @@ Usage:
 ```
 - PUT
 ```
+http://localhost:3000/api/person/
+
 {
   "id"  : 1,
   "name": "nameEdited",
