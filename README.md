@@ -1,6 +1,8 @@
 # API-REST-GO
 An API you can register, update, list and delete people.
-Code written in golang
+
+Code written in golang By IgorLomba.
+
 
 Usage: 
 

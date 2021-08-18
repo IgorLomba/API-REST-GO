@@ -1,5 +1,7 @@
 package db
 
+// By: DARTHxIKE
+
 import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
