@@ -3,6 +3,7 @@ package controllers
 // By: DARTHxIKE
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/IgorLomba/API-REST-GO/API-REST-GO/models"
@@ -109,6 +110,16 @@ func UpdatePerson(c *gin.Context) {
 	var person models.Person
 	var address models.Address
 	err := c.ShouldBindJSON(&person)
+	// if person does not exist, return error
+	personAux, errAux := models.LoadPersonByID(fmt.Sprint(person.ID))
+
+	if personAux.ID == 0 || personAux.IsDel == 1 {
+		c.JSON(400, gin.H{
+			"error": "cant update person who does not exist",
+		})
+		return
+	}
+
 	if err != nil {
 		c.JSON(400, gin.H{
 			"error": "cannot bind JSON: " + err.Error(),
@@ -116,7 +127,7 @@ func UpdatePerson(c *gin.Context) {
 		return
 	}
 	person, err = models.UpdatePerson(person, address)
-	if err != nil {
+	if err != nil && errAux != nil {
 		c.JSON(400, gin.H{
 			"error": "cannot bind update: " + err.Error(),
 		})
