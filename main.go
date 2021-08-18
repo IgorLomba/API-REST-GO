@@ -1,5 +1,7 @@
 package main
 
+// By: DARTHxIKE
+
 import (
 	"fmt"
 

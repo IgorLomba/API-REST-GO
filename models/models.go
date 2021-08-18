@@ -1,5 +1,7 @@
 package models
 
+// By: DARTHxIKE
+
 import (
 	"github.com/IgorLomba/API-REST-GO/API-REST-GO/db"
 	"github.com/jinzhu/gorm"
