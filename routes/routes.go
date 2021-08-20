@@ -20,7 +20,10 @@ func LoadRoutes(router *gin.Engine) *gin.Engine {
 			person.POST("/", controllers.CreatePerson)
 			person.PUT("/", controllers.UpdatePerson)
 			person.DELETE("/:id", controllers.DeletePersonID)
-
+		}
+		login := main.Group("login")
+		{
+			login.POST("/", controllers.Login)
 		}
 	}
 	return router
