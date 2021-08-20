@@ -1,13 +1,13 @@
 package models
 
-// By: DARTHxIKE
-
 import (
-	"github.com/IgorLomba/API-REST-GO/API-REST-GO/db"
-	"github.com/IgorLomba/API-REST-GO/API-REST-GO/services"
+	"github.com/IgorLomba/API-REST-GO/db"
+	"github.com/IgorLomba/API-REST-GO/services"
 	"github.com/jinzhu/gorm"
 	"gorm.io/plugin/soft_delete"
 )
+
+// By: DARTHxIKE
 
 // struct that the table will be created with
 type Person struct {

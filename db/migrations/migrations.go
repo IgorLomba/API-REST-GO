@@ -1,11 +1,11 @@
 package migrations
 
-// By: DARTHxIKE
-
 import (
-	"github.com/IgorLomba/API-REST-GO/API-REST-GO/models"
+	"github.com/IgorLomba/API-REST-GO/models"
 	"github.com/jinzhu/gorm"
 )
+
+// By: DARTHxIKE
 
 /* useless function*/
 func RunMigrations(db *gorm.DB) {

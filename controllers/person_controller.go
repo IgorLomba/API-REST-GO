@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/IgorLomba/API-REST-GO/API-REST-GO/models"
+	"github.com/IgorLomba/API-REST-GO/models"
 	"github.com/gin-gonic/gin"
 )
 

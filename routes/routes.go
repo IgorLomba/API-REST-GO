@@ -3,7 +3,7 @@ package routes
 // By: DARTHxIKE
 
 import (
-	"github.com/IgorLomba/API-REST-GO/API-REST-GO/controllers"
+	"github.com/IgorLomba/API-REST-GO/controllers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,10 +21,10 @@ func LoadRoutes(router *gin.Engine) *gin.Engine {
 			person.PUT("/", controllers.UpdatePerson)
 			person.DELETE("/:id", controllers.DeletePersonID)
 		}
-		login := main.Group("login")
-		{
-			login.POST("/", controllers.Login)
-		}
+		// login := main.Group("login")
+		// {
+		// 	login.POST("/", controllers.Login)
+		// }
 	}
 	return router
 }

@@ -5,7 +5,7 @@ package server
 import (
 	"log"
 
-	"github.com/IgorLomba/API-REST-GO/API-REST-GO/routes"
+	"github.com/IgorLomba/API-REST-GO/routes"
 	"github.com/gin-gonic/gin"
 )
 
