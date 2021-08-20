@@ -4,17 +4,20 @@ package models
 
 import (
 	"github.com/IgorLomba/API-REST-GO/API-REST-GO/db"
+	"github.com/IgorLomba/API-REST-GO/API-REST-GO/services"
 	"github.com/jinzhu/gorm"
 	"gorm.io/plugin/soft_delete"
 )
 
 // struct that the table will be created with
 type Person struct {
-	ID      uint    `json:"id" gorm:"primaryKey"`
-	Name    string  `json:"name"`
-	Birth   string  `json:"birth"`
-	Nif     string  `json:"nif"`
-	Address Address `gorm:"foreignKey:id" json:"address"`
+	ID       uint    `json:"id" gorm:"primaryKey"`
+	Email    string  `json:"user"`
+	Password string  `json:"password"`
+	Name     string  `json:"name"`
+	Birth    string  `json:"birth"`
+	Nif      string  `json:"nif"`
+	Address  Address `gorm:"foreignKey:id" json:"address"`
 	gorm.Model
 	IsDel soft_delete.DeletedAt `gorm:"softDelete:flag"`
 }
@@ -110,6 +113,7 @@ func LoadPersonByAddress(search string) (person []Person, err error) {
 // create a person with address
 func CreatePerson(person Person) (Person, error) {
 	db := db.ConnectDb()
+	person.Password = services.SHA256Encoder(person.Password)
 	err := db.Create(&person).Error
 	db.AutoMigrate(Person{}, Address{})
 	return person, err
@@ -118,6 +122,7 @@ func CreatePerson(person Person) (Person, error) {
 // update a person
 func UpdatePerson(person Person, address Address) (Person, error) {
 	db := db.ConnectDb()
+	person.Password = services.SHA256Encoder(person.Password)
 	err := db.Save(&person).Error
 	address = person.Address
 	if err == nil {
