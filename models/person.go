@@ -12,7 +12,7 @@ import (
 // struct that the table will be created with
 type Person struct {
 	ID       uint    `json:"id" gorm:"primaryKey"`
-	Email    string  `json:"user"`
+	Email    string  `json:"email"`
 	Password string  `json:"password"`
 	Name     string  `json:"name"`
 	Birth    string  `json:"birth"`
