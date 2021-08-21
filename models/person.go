@@ -11,13 +11,12 @@ import (
 
 // struct that the table will be created with
 type Person struct {
-	ID       uint    `json:"id" gorm:"primaryKey"`
 	Email    string  `json:"email"`
 	Password string  `json:"password"`
 	Name     string  `json:"name"`
 	Birth    string  `json:"birth"`
 	Nif      string  `json:"nif"`
-	Address  Address `gorm:"foreignKey:id" json:"address"`
+	Address  Address `gorm:"foreignKey:ID" json:"address"`
 	gorm.Model
 	IsDel soft_delete.DeletedAt `gorm:"softDelete:flag"`
 }
@@ -81,9 +80,9 @@ func LoadPersonByName(search string) (person []Person, err error) {
 	search = "%" + search + "%"
 
 	// you have to use the query builder to compare is_del
-	err = db.Table(`person`).Joins(`join address on (person.id = address.id)`).Where(`lower(person.name) like lower(?) and (person.is_del = 0)`, search).Scan(&person).Error
+	err = db.Table(`person`).Joins(`join address on (person.ID = address.ID)`).Where(`lower(person.name) like lower(?) and (person.is_del = 0)`, search).Scan(&person).Error
 	if err == nil {
-		err = db.Table(`address`).Joins(`join person on (person.id = address.id)`).Where(`lower(person.name) like lower(?) and (address.is_del = 0)`, search).Scan(&address).Error
+		err = db.Table(`address`).Joins(`join person on (person.ID = address.ID)`).Where(`lower(person.name) like lower(?) and (address.is_del = 0)`, search).Scan(&address).Error
 	}
 
 	for i := 0; i < len(person); i++ {
@@ -99,9 +98,26 @@ func LoadPersonByAddress(search string) (person []Person, err error) {
 
 	search = "%" + search + "%"
 
-	err = db.Table(`person`).Joins(`join address on (person.id = address.id)`).Where(`lower(address.street) like lower(?) or lower(address.city) like lower(?) and (person.is_del = 0)`, search, search).Scan(&person).Error
+	err = db.Table(`person`).Joins(`join address on (person.ID = address.ID)`).Where(`lower(address.street) like lower(?) or lower(address.city) like lower(?) and (person.is_del = 0)`, search, search).Scan(&person).Error
 	if err == nil {
-		err = db.Table(`address`).Joins(`join person on (person.id = address.id)`).Where(`lower(address.street) like lower(?) or lower(address.city) like lower(?) and (address.is_del = 0)`, search, search).Scan(&address).Error
+		err = db.Table(`address`).Joins(`join person on (person.ID = address.ID)`).Where(`lower(address.street) like lower(?) or lower(address.city) like lower(?) and (address.is_del = 0)`, search, search).Scan(&address).Error
+	}
+
+	for i := 0; i < len(person); i++ {
+		person[i].Address = address[i]
+	}
+	return
+}
+
+func LoadPersonByBirth(search string) (person []Person, err error) {
+	db := db.ConnectDb()
+	var address []Address
+
+	search = "'" + search + "'"
+
+	err = db.Table(`person`).Joins(`join address on (person.ID = address.ID)`).Where(`TO_DATE(person.birth,'YYYYMMDD') < ? and (person.is_del = 0)`, search).Scan(&person).Error
+	if err == nil {
+		err = db.Table(`address`).Joins(`join person on (person.ID = address.ID)`).Where(`TO_DATE(person.birth,'YYYYMMDD') < ? and (address.is_del = 0)`, search).Scan(&address).Error
 	}
 
 	for i := 0; i < len(person); i++ {

@@ -18,6 +18,7 @@ func LoadRoutes(router *gin.Engine) *gin.Engine {
 			person.GET("/:id", controllers.GetPersonId)
 			person.GET("/name/:id", controllers.GetPersonName)
 			person.GET("/address/:id", controllers.GetPersonAddress)
+			person.GET("/birth/:id", controllers.GetPersonBirth)
 			person.DELETE("/:id", controllers.DeletePersonID)
 		}
 		create := main.Group("create")

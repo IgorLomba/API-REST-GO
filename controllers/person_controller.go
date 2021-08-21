@@ -85,6 +85,24 @@ func GetPersonAddress(c *gin.Context) {
 	}
 	c.JSON(200, person)
 }
+func GetPersonBirth(c *gin.Context) {
+	id := c.Param("id")
+	person, err := models.LoadPersonByBirth(id)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "cannot find person who birth in: " + id,
+		})
+		return
+	}
+	if len(person) == 0 {
+		explain := "person birth in" + id + " does not exist."
+		c.JSON(400, gin.H{
+			"error": explain,
+		})
+		return
+	}
+	c.JSON(200, person)
+}
 
 func CreatePerson(c *gin.Context) {
 	var person models.Person
